@@ -1,0 +1,90 @@
+
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-email_sender_db}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./backend
+    working_dir: /usr/src/app
+    volumes:
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    build: ./backend
+    working_dir: /usr/src/app
+    command: celery -A app.celery_worker.celery worker --loglevel=info
+    volumes:
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - api
+      - redis
+
+  celery_beat:
+    build: ./backend
+    working_dir: /usr/src/app
+    command: celery -A app.celery_worker.celery beat --loglevel=info
+    volumes:
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - api
+      - redis
+
+  flower:
+    build: ./backend     # ✅ use backend build instead of raw python image
+    working_dir: /usr/src/app
+    command: >
+      bash -c "
+        pip install --no-cache-dir flower &&
+        celery -A app.celery_worker.celery flower --port=5555 --broker=${REDIS_URL:-redis://redis:6379/0}
+      "
+    volumes:
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery_worker
+
+  frontend:
+    build: ./frontend
+    working_dir: /usr/src/app
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    command: ["sh", "-c", "npm install && npm run dev -- --host 0.0.0.0"]
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - api
+
+volumes:
+  db-data:

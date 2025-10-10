@@ -1,0 +1,141 @@
+PRODUCT REQUIREMENTS DOCUMENT
+Project Name: Email Campaign MVP with Seedbox Deliverability Control
+Owner: [Your Name]
+Version: 1.0
+Last Updated: [Insert Date]
+
+1. Project Summary
+This project is a web-based email campaign platform that allows users to:
+- Send HTML and plain text emails using multiple SMTP accounts.
+- Validate recipient lists.
+- Automatically test inbox placement (via seedbox) before each batch send.
+- Manage SMTP accounts and campaigns via a single-page web dashboard (SPA).
+- Automatically pause sending if the seed test fails (email lands in spam).
+- Continue if inbox placement is confirmed.
+
+The app must be scalable, robust, and AI-code-friendly — i.e., written modularly, cleanly, and following best practices.
+
+2. Core Features (MVP)
+A. Email Sending
+- Send both HTML and plain text emails.
+- Rotate SMTPs in a round-robin fashion.
+- Enforce per-SMTP daily limits and global rate limits.
+- Retry failed SMTPs automatically; switch to next available.
+- Pause campaign and alert user if seedbox detects spam placement.
+
+B. SMTP Manager
+- Add, edit, delete SMTP accounts.
+- Each account stores: host, port, username, encrypted password, limits, status.
+- Test SMTP connection.
+- Encryption via Fernet key in environment.
+
+C. Recipients
+- Upload CSV, validate syntax + MX.
+- Dedupe automatically.
+- Store recipients in DB.
+- Mark suppressed / invalid if needed.
+
+D. Seedbox
+- One or more inboxes used to test inbox placement.
+- Always send a seed test email before each batch.
+- If inbox placement passes → continue.
+- If spam → pause and alert user.
+- Automated seedbox accounts (created or connected automatically).
+
+E. Campaigns
+- Create via Quill editor.
+- Include subject, from name, HTML + text body.
+- Select recipients, SMTPs, seedbox.
+- Test send button (send to any email/seedbox).
+- Scheduler (immediate or future send).
+- SPA flow with multiple pages but no page reload.
+
+F. Dashboard
+- View running campaigns, SMTP usage, paused states.
+- Logs of sends (sent, failed, spam, etc.).
+- Retain logs for 7 days.
+- Email alert for spam/paused campaigns.
+
+G. Background & System Tasks
+- Celery + Redis worker architecture.
+- Flower dashboard for monitoring.
+- Celery Beat for periodic cleanup and quota resets.
+
+3. Tech Stack
+Backend: FastAPI, Celery, Redis, PostgreSQL, SQLAlchemy, Alembic
+Frontend: React SPA, TailwindCSS, shadcn/ui, Quill.js, Axios, React Query
+Deployment: Docker Compose → DigitalOcean
+Other Tools: Flower (Celery monitor), email-validator library
+Secrets: Stored securely using environment variables or a secrets manager.
+
+4. Key Rules (Non-Negotiable)
+1. Each campaign batch must send a seed test before sending emails.
+2. If the seedbox detects spam → campaign paused, email alert sent.
+3. Round robin SMTP selection respecting per-SMTP daily/hourly limits.
+4. Validation on import only (basic + MX check).
+5. Multi-user support, no role system.
+6. Logs purged automatically after 7 days.
+7. SPA navigation, no page reloads.
+8. Frontend + backend must communicate through RESTful JSON APIs.
+
+5. Architecture Summary
+Components:
+1. FastAPI Backend
+2. Celery Worker
+3. React Frontend
+4. Postgres DB
+5. Redis
+6. Flower
+
+6. Data Models (simplified)
+User — id, email, password_hash, api_key, created_at
+SMTPAccount — id, user_id, host, port, username, encrypted_password, limits, status
+Recipient — id, user_id, email, validated, suppressed
+SeedBox — id, user_id, email_address, last_status, last_checked
+Campaign — id, user_id, subject, html_body, text_body, from_name, status, created_at
+Batch — id, campaign_id, smtp_id, batch_number, seedbox_status, sent_count, paused
+EmailLog — id, campaign_id, recipient_id, smtp_id, status, timestamp
+
+7. Key Workflows
+Campaign Send Flow
+1. User clicks “Start Campaign.”
+2. Celery sends seed email → checks inbox placement.
+3. If inbox: send next batch (within limits).
+4. If spam: pause + alert user.
+5. Logs saved per recipient.
+6. Continue until all batches sent.
+
+SMTP Limit Management
+- Each SMTP has daily/hourly counters.
+- Resets automatically via Celery Beat.
+
+8. Alerts & Monitoring
+- On spam detection → email alert.
+- On SMTP failure → retry, then switch SMTP.
+- On campaign pause → flag in dashboard.
+- Flower for live monitoring.
+
+9. Testing & Quality
+- Pytest suite for core modules.
+- Integration tests with mock SMTP + IMAP servers.
+- Linting with flake8.
+- Frontend unit tests.
+
+10. Versioning & Delivery
+- Each phase must end in a working, testable Docker Compose state.
+- Validate all endpoints and UIs after each milestone.
+- Follow clean architecture and modular service separation.
+
+11. Future Roadmap (Post-MVP)
+- Analytics dashboard (opens, clicks).
+- Unsubscribe management.
+- Multi-seedbox weighting logic.
+- API keys for external integrations.
+- Domain warm-up automation.
+
+12. Success Metrics
+- Campaigns send reliably.
+- 5,000 emails/day across multiple SMTPs.
+- Automatic spam detection + pause.
+- Stable under concurrent campaigns.
+- AI-generated code remains aligned with PRD specs.
