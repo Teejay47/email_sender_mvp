@@ -1,12 +1,15 @@
-from sqlalchemy.ext.declarative import declarative_base
+# backend/app/models/base.py
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import MetaData
 
+# use naming convention to help Alembic
+convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
 
-Base = declarative_base()
-
-
-# Example model placeholder (create proper models later)
-# from sqlalchemy import Column, Integer, String
-# class Recipient(Base):
-# __tablename__ = 'recipients'
-# id = Column(Integer, primary_key=True)
-# email = Column(String, unique=True, index=True, nullable=False)
+metadata = MetaData(naming_convention=convention)
+Base = declarative_base(metadata=metadata)

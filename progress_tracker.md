@@ -10,5 +10,15 @@
 ### 🚧 In Progress
 - [ ] Testing container orchestration stability
 
+## Current Phase: Phase 2 – Database Models & Migrations
+
+### ✅ Completed
+- [x] SQLAlchemy models defined
+- [x] Alembic initialized and migrations applied
+- [x] DB health endpoint verified
+
+### 🚧 In Progress
+- [ ] Pydantic schemas validation
+
 ### 🧩 Next
-- Phase 2 – Database Models
+- Phase 3 – SMTP Manager endpoints & encryption

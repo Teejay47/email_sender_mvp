@@ -8,3 +8,4 @@ celery[redis]
 redis
 requests
 pydantic-settings>=2.0.0
+alembic
