@@ -7,8 +7,7 @@
 - [x] React SPA scaffolded with 5 pages
 - [x] Docker Compose running with Postgres, Redis, Celery, Flower
 
-### 🚧 In Progress
-- [ ] Testing container orchestration stability
+
 
 ## Current Phase: Phase 2 – Database Models & Migrations
 
@@ -17,8 +16,28 @@
 - [x] Alembic initialized and migrations applied
 - [x] DB health endpoint verified
 
-### 🚧 In Progress
-- [ ] Pydantic schemas validation
 
-### 🧩 Next
-- Phase 3 – SMTP Manager endpoints & encryption
+
+## Current Phase: Phase 3 – SMTP Manager
+
+### ✅ Completed
+- [x] Backend SMTP CRUD implemented
+- [x] Encryption with Fernet configured
+- [x] Frontend SMTP Manager UI created
+- [x] SMTP test connection endpoint works
+
+## Current Phase: Phase 4 – Recipient Management & Validation
+
+### ✅ Completed
+- [x] Backend recipient endpoints implemented
+- [x] Email validation logic functional
+- [x] Frontend recipient manager UI operational
+
+## Current Phase: Phase 5 – SeedBox Integration & Inbox Testing
+
+### ✅ Completed
+- [x] Backend seed box endpoints and Celery task created
+- [x] Frontend Seed Inbox page working
+- [x] Campaign pre-send inbox test functional
+
+

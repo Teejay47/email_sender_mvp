@@ -6,9 +6,9 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /usr/src/app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
+# 🧠 Install only what we actually need — PostgreSQL client for pg_isready
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and install Python dependencies

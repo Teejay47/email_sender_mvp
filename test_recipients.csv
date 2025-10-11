@@ -1,0 +1,10 @@
+valid.user1@example.com
+invalid-email
+Valid.User2@Example.COM
+typo@no-tld
+another.valid+tag@gmail.com
+bad@@example.com
+john.doe@sub.example.org
+no-at-symbol.com
+user-with-dash@domain.co.uk
+spaces @example.com

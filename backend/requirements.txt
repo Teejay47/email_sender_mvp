@@ -1,11 +1,27 @@
+# --- Core Web Framework ---
 fastapi
 uvicorn[standard]
+
+# --- Database & ORM ---
 SQLAlchemy
 psycopg2-binary
+alembic
+
+# --- Environment & Settings ---
 python-dotenv
-pydantic
+pydantic[email]         # includes email-validator support
+pydantic-settings>=2.0.0
+
+# --- Background Tasks ---
 celery[redis]
 redis
+
+# --- Security & Utils ---
+cryptography
 requests
-pydantic-settings>=2.0.0
-alembic
+
+email-validator
+dnspython
+
+python-multipart
+
