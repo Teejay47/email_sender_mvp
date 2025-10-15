@@ -5,25 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52578028-1013-451a-b68c-d1db83416037" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/eslint.config.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Campaigns.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/api/seedbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/api/seedbox.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/celery_worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/celery_worker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/core/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/core/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/batch.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/batch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/campaign.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/campaign.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/email_log.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/email_log.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/recipient.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/recipient.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/models/seedbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/seedbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/schemas/recipient.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/recipient.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/smtp_account.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/smtp_account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/schemas/campaign.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/campaign.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/schemas/smtp_account.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/smtp_account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/tasks/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/tasks/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/tasks/example_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/tasks/example_tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/tasks/seedbox_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/tasks/seedbox_tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/utils/campaign_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/utils/campaign_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/utils/email_sender.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/utils/email_sender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/utils/imap_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/utils/imap_checker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/celerybeat-schedule" beforeDir="false" afterPath="$PROJECT_DIR$/backend/celerybeat-schedule" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Recipients.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Recipients.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SMTPManager.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/SMTPManager.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SeedInbox.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/SeedInbox.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_tracker.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_tracker.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Campaigns.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Dashboard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Recipients.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SMTPManager.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SeedInbox.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Settings.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +86,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend" />
       <recent name="$PROJECT_DIR$/backend/app" />
     </key>
   </component>
@@ -81,5 +107,16 @@
       <updated>1760068671484</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/app/models/campaign_batch.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

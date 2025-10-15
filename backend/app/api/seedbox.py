@@ -93,7 +93,7 @@ def test_seedbox(seedbox_id: int = Body(...), user_id: int = Body(1), db: Sessio
             },
             to_address=seedbox.email_address,
             subject=subject,
-            body=body,
+            text_body=body,
             from_name=settings.FROM_NAME,
             from_email=settings.FROM_EMAIL,
             reply_to=settings.REPLY_TO,

@@ -1,7 +1,6 @@
 # backend/app/models/user.py
 from sqlalchemy import Column, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
-
 from .base import Base
 
 
@@ -16,7 +15,7 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now(), nullable=False)
 
-    # relationships
+    # relationships (use string references only)
     smtp_accounts = relationship("SMTPAccount", back_populates="user", cascade="all, delete-orphan")
     recipients = relationship("Recipient", back_populates="user", cascade="all, delete-orphan")
     seedboxes = relationship("SeedBox", back_populates="user", cascade="all, delete-orphan")

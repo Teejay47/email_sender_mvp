@@ -1,4 +1,4 @@
-from .celery import celery
+from app.celery_worker import celery
 
 
 # Note: If you name this file example_tasks.py, Celery autodiscover should find tasks

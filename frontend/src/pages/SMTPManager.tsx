@@ -18,10 +18,16 @@ function SMTPRow({ smtp, onTest, onEdit, onDelete }) {
         >
           Test
         </button>
-        <button className="mr-2 px-3 py-1 rounded bg-yellow-500 text-white" onClick={() => onEdit(smtp)}>
+        <button
+          className="mr-2 px-3 py-1 rounded bg-yellow-500 text-white"
+          onClick={() => onEdit(smtp)}
+        >
           Edit
         </button>
-        <button className="px-3 py-1 rounded bg-red-600 text-white" onClick={() => onDelete(smtp.id)}>
+        <button
+          className="px-3 py-1 rounded bg-red-600 text-white"
+          onClick={() => onDelete(smtp.id)}
+        >
           Delete
         </button>
       </td>
@@ -46,27 +52,24 @@ export default function SMTPManager() {
     is_active: true,
   });
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1",
-});
-
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000",
+  });
 
   const load = async () => {
-  setLoading(true);
-  try {
-    const res = await api.get("/smtp/list");
-    // make sure it's always an array
-    const data = Array.isArray(res.data) ? res.data : [];
-    setList(data);
-  } catch (err) {
-    console.error(err);
-    setList([]); // prevent crash
-    alert("Failed to load SMTPs");
-  } finally {
-    setLoading(false);
-  }
-};
-
+    setLoading(true);
+    try {
+      const res = await api.get("/api/v1/smtp/list"); // ✅ explicit /api/v1
+      const data = Array.isArray(res.data) ? res.data : [];
+      setList(data);
+    } catch (err) {
+      console.error(err);
+      setList([]);
+      alert("Failed to load SMTPs");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => { load(); }, []);
 
@@ -90,10 +93,10 @@ const api = axios.create({
     e.preventDefault();
     try {
       if (editing) {
-        await api.put(`/smtp/${editing.id}`, form);
+        await api.put(`/api/v1/smtp/${editing.id}`, form); // ✅ explicit /api/v1
         alert("Updated");
       } else {
-        await api.post("/smtp/add", form);
+        await api.post("/api/v1/smtp/add", form); // ✅ explicit /api/v1
         alert("Added");
       }
       setShowForm(false);
@@ -106,7 +109,7 @@ const api = axios.create({
 
   const onTest = async (id) => {
     try {
-      const res = await api.post("/smtp/test", { smtp_id: id });
+      const res = await api.post("/api/v1/smtp/test", { smtp_id: id }); // ✅ explicit /api/v1
       if (res.data.status === "success") alert("Connection OK");
       else alert("Test result: " + JSON.stringify(res.data));
     } catch (err) {
@@ -133,7 +136,7 @@ const api = axios.create({
   const onDelete = async (id) => {
     if (!confirm("Delete this SMTP?")) return;
     try {
-      await api.delete(`/smtp/${id}`);
+      await api.delete(`/api/v1/smtp/${id}`); // ✅ explicit /api/v1
       alert("Deleted");
       load();
     } catch (err) {
@@ -146,7 +149,10 @@ const api = axios.create({
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">SMTP Manager</h1>
-        <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={openAdd}>
+        <button
+          className="px-4 py-2 bg-green-600 text-white rounded"
+          onClick={openAdd}
+        >
           Add SMTP
         </button>
       </div>
@@ -168,7 +174,13 @@ const api = axios.create({
           </thead>
           <tbody>
             {list.map((smtp) => (
-              <SMTPRow key={smtp.id} smtp={smtp} onTest={onTest} onEdit={onEdit} onDelete={onDelete} />
+              <SMTPRow
+                key={smtp.id}
+                smtp={smtp}
+                onTest={onTest}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
             ))}
           </tbody>
         </table>
@@ -177,30 +189,71 @@ const api = axios.create({
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded p-6 w-full max-w-xl">
-            <h2 className="text-xl mb-4">{editing ? "Edit SMTP" : "Add SMTP"}</h2>
+            <h2 className="text-xl mb-4">
+              {editing ? "Edit SMTP" : "Add SMTP"}
+            </h2>
             <form onSubmit={onSubmit} className="space-y-3">
               <div>
                 <label className="block text-sm">Host</label>
-                <input value={form.host} onChange={(e)=>setForm({...form, host:e.target.value})} className="w-full border p-2 rounded"/>
+                <input
+                  value={form.host}
+                  onChange={(e) =>
+                    setForm({ ...form, host: e.target.value })
+                  }
+                  className="w-full border p-2 rounded"
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm">Port</label>
-                  <input type="number" value={form.port} onChange={(e)=>setForm({...form, port:parseInt(e.target.value)})} className="w-full border p-2 rounded"/>
+                  <input
+                    type="number"
+                    value={form.port}
+                    onChange={(e) =>
+                      setForm({ ...form, port: parseInt(e.target.value) })
+                    }
+                    className="w-full border p-2 rounded"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm">Username</label>
-                  <input value={form.username} onChange={(e)=>setForm({...form, username:e.target.value})} className="w-full border p-2 rounded"/>
+                  <input
+                    value={form.username}
+                    onChange={(e) =>
+                      setForm({ ...form, username: e.target.value })
+                    }
+                    className="w-full border p-2 rounded"
+                  />
                 </div>
               </div>
               <div>
                 <label className="block text-sm">Password</label>
-                <input type="password" value={form.password} onChange={(e)=>setForm({...form, password:e.target.value})} className="w-full border p-2 rounded"/>
-                <small className="text-gray-500">Leave empty to keep existing password (on edit)</small>
+                <input
+                  type="password"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                  className="w-full border p-2 rounded"
+                />
+                <small className="text-gray-500">
+                  Leave empty to keep existing password (on edit)
+                </small>
               </div>
               <div className="flex justify-end space-x-2">
-                <button type="button" onClick={()=>setShowForm(false)} className="px-4 py-2 border rounded">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Save
+                </button>
               </div>
             </form>
           </div>

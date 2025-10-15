@@ -1,9 +1,7 @@
 # backend/app/models/recipient.py
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, func
 from sqlalchemy.orm import relationship
-
 from .base import Base
-
 
 class Recipient(Base):
     __tablename__ = "recipients"
@@ -17,5 +15,8 @@ class Recipient(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now(), nullable=False)
 
+    # relationships using string references
     user = relationship("User", back_populates="recipients")
-    email_logs = relationship("EmailLog", back_populates="recipient")
+    email_logs = relationship("EmailLog", back_populates="recipient", cascade="all, delete-orphan")
+
+

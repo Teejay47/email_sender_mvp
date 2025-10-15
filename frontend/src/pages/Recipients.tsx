@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// Axios instance with VITE_API_URL
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/api/v1`
+    : "http://localhost:8000/api/v1",
 });
 
 export default function Recipients() {
@@ -17,14 +20,16 @@ export default function Recipients() {
   const [file, setFile] = useState(null);
   const [importResult, setImportResult] = useState(null);
   const [importing, setImporting] = useState(false);
-  const [bulkAction, setBulkAction] = useState(""); // ✅ Added this line
+  const [bulkAction, setBulkAction] = useState("");
 
+  // Load recipients
   const load = async () => {
     setLoading(true);
     try {
       const params = { page, per_page: perPage };
       if (filter === "valid") params.filter_status = "valid";
       if (filter === "suppressed") params.filter_status = "suppressed";
+
       const res = await api.get("/recipients/list", { params });
       setList(res.data || []);
     } catch (err) {
@@ -35,13 +40,15 @@ export default function Recipients() {
     }
   };
 
-  useEffect(() => { load(); }, [page, filter]);
+  useEffect(() => {
+    load();
+  }, [page, filter]);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files?.[0] || null);
-  };
+  // File input
+  const handleFileChange = (e) => setFile(e.target.files?.[0] || null);
 
-  const doImport = async (asyncTask=false) => {
+  // Import recipients
+  const doImport = async (asyncTask = false) => {
     setImporting(true);
     setImportResult(null);
     try {
@@ -66,6 +73,7 @@ export default function Recipients() {
     }
   };
 
+  // Toggle suppression
   const toggleSuppress = async (id, current) => {
     try {
       await api.put(`/recipients/${id}/suppress`, { suppressed: !current });
@@ -76,6 +84,7 @@ export default function Recipients() {
     }
   };
 
+  // Delete single recipient
   const deleteRecipient = async (id) => {
     if (!confirm("Delete recipient?")) return;
     try {
@@ -87,6 +96,7 @@ export default function Recipients() {
     }
   };
 
+  // Bulk delete
   const handleBulkDelete = async (type, asyncTask = false) => {
     if (!confirm(`Delete all ${type} recipients? This cannot be undone.`)) return;
     try {
@@ -111,7 +121,6 @@ export default function Recipients() {
       {/* Header + Filters */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
         <h1 className="text-2xl font-bold mb-2 sm:mb-0">Recipients</h1>
-
         <div className="flex items-center space-x-2">
           <select
             value={filter}
@@ -122,7 +131,6 @@ export default function Recipients() {
             <option value="valid">Valid</option>
             <option value="suppressed">Suppressed</option>
           </select>
-
           <button
             className="px-4 py-2 bg-green-600 text-white rounded"
             onClick={() => setShowModal(true)}
@@ -132,10 +140,9 @@ export default function Recipients() {
         </div>
       </div>
 
-      {/* Bulk Delete Control */}
+      {/* Bulk Delete */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         <select
-          id="bulkAction"
           className="p-2 border rounded"
           onChange={(e) => setBulkAction(e.target.value)}
           value={bulkAction}
@@ -146,7 +153,6 @@ export default function Recipients() {
           <option value="suppressed">Delete Suppressed</option>
           <option value="async_all">Queue Async Delete (All)</option>
         </select>
-
         <button
           className="px-4 py-2 bg-red-600 text-white rounded"
           disabled={!bulkAction}

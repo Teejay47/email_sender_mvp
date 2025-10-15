@@ -1,5 +1,6 @@
+# backend/app/core/config.py
+from typing import Optional
 from pydantic_settings import BaseSettings
-
 
 class Settings(BaseSettings):
     # ---------------------------
@@ -16,7 +17,6 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str = "db"
     POSTGRES_PORT: int = 5432
 
-
     # ---------------------------
     # Redis / Celery Configuration
     # ---------------------------
@@ -27,32 +27,41 @@ class Settings(BaseSettings):
     # ---------------------------
     # SMTP / Email Configuration
     # ---------------------------
+    from distutils.util import strtobool
+
     SMTP_HOST: str
     SMTP_PORT: int
     SMTP_USERNAME: str
     SMTP_PASSWORD: str
-    SMTP_USE_TLS: bool = True
+    SMTP_USE_TLS: bool = True  # keep this default
+
+    @property
+    def SMTP_CONFIG(self) -> dict:
+        return {
+            "host": self.SMTP_HOST,
+            "port": self.SMTP_PORT,
+            "username": self.SMTP_USERNAME,
+            "password": self.SMTP_PASSWORD,
+            "use_tls": bool(strtobool(str(self.SMTP_USE_TLS))),  # ✅ convert string "false"/"true"
+        }
 
     FROM_NAME: str
     FROM_EMAIL: str
     REPLY_TO: str
 
     # ---------------------------
-    # SMTP / Email Configuration
+    # IMAP Configuration
     # ---------------------------
-
     IMAP_HOST: str = "imap.gmail.com"
     IMAP_PORT: int = 993
-    IMAP_USERNAME: str | None = None
-    IMAP_PASSWORD: str | None = None
-
+    IMAP_USERNAME: Optional[str] = None
+    IMAP_PASSWORD: Optional[str] = None
 
     # ---------------------------
     # Utility Properties
     # ---------------------------
     @property
     def DATABASE_URL(self) -> str:
-        """Build full PostgreSQL connection URL."""
         return (
             f"postgresql+psycopg2://{self.POSTGRES_USER}:"
             f"{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:"
@@ -61,7 +70,6 @@ class Settings(BaseSettings):
 
     @property
     def SMTP_CONFIG(self) -> dict:
-        """Convenience dictionary for sending emails."""
         return {
             "host": self.SMTP_HOST,
             "port": self.SMTP_PORT,
@@ -73,6 +81,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         extra = "ignore"
-
 
 settings = Settings()

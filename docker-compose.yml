@@ -1,21 +1,26 @@
 
-
 services:
   db:
     image: postgres:15
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-email_sender_db}
+    env_file:
+      - ./backend/.env
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      retries: 5
 
   redis:
     image: redis:7
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
 
   api:
     build: ./backend
@@ -27,8 +32,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: >
       bash -c "
         until pg_isready -h db -p 5432 -U ${POSTGRES_USER:-postgres}; do
@@ -39,19 +46,27 @@ services:
         alembic upgrade head &&
         uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
       "
-
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   celery_worker:
     build: ./backend
     working_dir: /usr/src/app
-    command: celery -A app.celery_worker.celery worker --loglevel=info
+    command: bash -c "celery -A app.celery_worker.celery worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-8}"
     volumes:
       - ./backend:/usr/src/app
     env_file:
       - ./backend/.env
     depends_on:
-      - api
-      - redis
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    restart: always
 
   celery_beat:
     build: ./backend
@@ -62,17 +77,20 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - api
-      - redis
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    restart: always
 
   flower:
-    build: ./backend     # ✅ use backend build instead of raw python image
+    build: ./backend
     working_dir: /usr/src/app
     command: >
-      bash -c "
-        pip install --no-cache-dir flower &&
-        celery -A app.celery_worker.celery flower --port=5555 --broker=${REDIS_URL:-redis://redis:6379/0}
-      "
+      celery -A app.celery_worker.celery flower
+      --broker=redis://redis:6379/0
+      --port=5555
+      --address=0.0.0.0
     volumes:
       - ./backend:/usr/src/app
     env_file:
@@ -80,8 +98,14 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - redis
-      - celery_worker
+      redis:
+        condition: service_healthy
+      celery_worker:
+        condition: service_started
+    restart: always
+
+
+
 
   frontend:
     build: ./frontend
@@ -93,12 +117,14 @@ services:
     ports:
       - "5173:5173"
     env_file:
-      - ./frontend/.env     # 👈 add this line
+      - ./frontend/.env
     environment:
       - CHOKIDAR_USEPOLLING=true
-    depends_on:
-      - api
+      - VITE_API_URL=http://api:8000
 
+    depends_on:
+      api:
+        condition: service_healthy
 
 volumes:
   db-data:

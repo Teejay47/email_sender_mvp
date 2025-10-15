@@ -7,21 +7,19 @@ SQLAlchemy
 psycopg2-binary
 alembic
 
+# --- Background Tasks ---
+celery[redis]>=5.3
+flower>=1.3.0
+redis
+
 # --- Environment & Settings ---
 python-dotenv
-pydantic[email]         # includes email-validator support
+pydantic[email]
 pydantic-settings>=2.0.0
-
-# --- Background Tasks ---
-celery[redis]
-redis
 
 # --- Security & Utils ---
 cryptography
 requests
-
 email-validator
 dnspython
-
 python-multipart
-

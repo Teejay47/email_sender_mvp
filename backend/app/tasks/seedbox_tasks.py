@@ -55,7 +55,6 @@ def send_seed_test_task(self, seedbox_id: int, user_id: int):
             reply_to=settings.REPLY_TO,
         )
 
-        # Mock result for MVP
         result = random.choice(["inbox", "spam"])
         seedbox.last_status = result
         seedbox.last_checked = datetime.utcnow()

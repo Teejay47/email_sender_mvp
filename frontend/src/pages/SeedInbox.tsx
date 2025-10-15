@@ -1,7 +1,9 @@
+// frontend/src/pages/SeedInbox.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+// Axios instance with proper base URL
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1",
 });
@@ -35,7 +37,8 @@ export default function SeedInbox() {
   const loadSeedboxes = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/seedbox/list", { params: { user_id: 1 } });
+      const res = await api.get("/api/v1/seedbox/list", { params: { user_id: 1 } });
+
       setSeedboxes(res.data || []);
     } catch (err) {
       console.error(err);

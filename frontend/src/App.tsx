@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import Dashboard from "./pages/Dashboard";
-import Campaigns from "./pages/Campaigns";
-import Recipients from "./pages/Recipients";
-import SMTPManager from "./pages/SMTPManager";
-import SeedInbox from "./pages/SeedInbox";
-import Settings from "./pages/Settings";
+import Campaigns from "./pages/Campaigns.tsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Recipients from "./pages/Recipients.jsx";
+import SMTPManager from "./pages/SMTPManager.jsx";
+import SeedInbox from "./pages/SeedInbox.jsx";
+import Settings from "./pages/Settings.jsx";
+
 
 function App() {
   return (

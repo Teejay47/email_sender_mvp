@@ -1,6 +1,8 @@
 # backend/app/schemas/smtp_account.py
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
+from datetime import datetime
+
 
 
 class SMTPAccountBase(BaseModel):
@@ -33,7 +35,7 @@ class SMTPAccountRead(SMTPAccountBase):
     id: int
     user_id: int
     used_today: int
-    last_reset: Optional[str] = None
+    last_reset: Optional[datetime] = None
 
     # ✅ Modern Pydantic v2 syntax
     model_config = ConfigDict(from_attributes=True)
